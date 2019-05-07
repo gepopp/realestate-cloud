@@ -1,0 +1,29 @@
+.navbar-laravel {
+  background-color: $primary-color;
+  color: white;
+}
+.navbar-brand {
+  float: left;
+  padding: 15px 15px;
+  font-size: 18px;
+  line-height: 20px;
+  text-decoration: none !important;
+}
+.navbar-brand span.white-black {
+  padding: 10px;
+  border: 1px solid black;
+  background-color: black;
+  color: white !important;
+}
+.navbar-brand span {
+  padding: 10px 10px;
+  border: 1px solid black;
+  color: black !important;
+  text-decoration: none !important;
+}
+.navbar-brand h6 {
+  color: white;
+  margin-top: 15px;
+  margin-left: 70px;
+  font-size: 12px;
+}

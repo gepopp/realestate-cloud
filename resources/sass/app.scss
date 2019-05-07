@@ -4,5 +4,17 @@
 // Variables
 @import 'variables';
 
+
+// components
+@import "imports/navbar";
+
+
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+
+.card-header{
+  color: white;
+  background-color: $primary-color !important;
+}
+
