@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\Notifications\CMPasswordReset;
 use App\Notifications\CMVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name', 'email', 'password',
     ];
+
+    protected $with = ['profile'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -43,5 +47,14 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new CMVerifyEmail());
     }
 
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new CMPasswordReset($token));
+    }
+
+
+    public function profile(){
+        return $this->hasOne(UserProfile::class);
+    }
 
 }
