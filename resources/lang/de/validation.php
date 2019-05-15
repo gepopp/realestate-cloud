@@ -11,6 +11,7 @@ return [
     |
     */
 
+
     'accepted'             => ':attribute muss akzeptiert werden.',
     'active_url'           => ':attribute ist keine gültige Internet-Adresse.',
     'after'                => ':attribute muss ein Datum nach dem :date sein.',
@@ -139,11 +140,14 @@ return [
     |
     */
     'attributes'           => [
+        'anrede'                => 'Anrede',
+        'prefix'                => 'Titel',
         'name'                  => 'Name',
+        'fax'                   => 'Faxnummer',
         'username'              => 'Benutzername',
         'email'                 => 'E-Mail Adresse',
-        'first_name'            => 'Vorname',
-        'last_name'             => 'Nachname',
+        'firstname'             => 'Vorname',
+        'lastname'              => 'Nachname',
         'password'              => 'Passwort',
         'password_confirmation' => 'Passwort-Bestätigung',
         'city'                  => 'Stadt',

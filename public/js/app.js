@@ -1835,6 +1835,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   methods: {
     onChange: function onChange(e) {
@@ -1842,6 +1843,12 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!e.target.files.length) return;
       var file = e.target.files[0];
+
+      if (file.size > 2100000) {
+        this.$emit('error', "Bitte lade ein Bild das kleiner als 2MB ist hoch.");
+        return;
+      }
+
       var reader = new FileReader();
       reader.readAsDataURL(file);
 
@@ -1893,6 +1900,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1905,7 +1914,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       imgURL: '',
       resultURL: '',
-      cropBTN: false
+      cropBTN: false,
+      errorMSG: ''
     };
   },
   methods: {
@@ -1917,12 +1927,17 @@ __webpack_require__.r(__webpack_exports__);
       this.cropBTN = false;
     },
     onLoad: function onLoad(avatar) {
+      this.errorMSG = '';
       this.imgURL = avatar.src;
       this.cropBTN = true;
+      this.uploadBTN = false;
     },
     reset: function reset() {
       this.imgURL = '';
       this.resultURL = '';
+    },
+    uploadError: function uploadError(message) {
+      this.errorMSG = message;
     }
   }
 });
@@ -53438,7 +53453,7 @@ var render = function() {
   return _c("div", [
     _c("input", {
       staticStyle: { display: "none" },
-      attrs: { type: "file", id: "selectedFile" },
+      attrs: { type: "file", id: "selectedFile", name: "image" },
       on: { change: _vm.onChange }
     }),
     _vm._v(" "),
@@ -53478,106 +53493,158 @@ var render = function() {
   return _c(
     "div",
     [
-      !_vm.resultURL
-        ? _c(
-            "clipper-basic",
+      _c(
+        "clipper-basic",
+        {
+          directives: [
             {
-              ref: "clipper",
-              staticClass: "my-clipper",
-              attrs: { src: _vm.imgURL, ratio: 1 }
+              name: "show",
+              rawName: "v-show",
+              value: !_vm.resultURL,
+              expression: "!resultURL"
+            }
+          ],
+          ref: "clipper",
+          staticClass: "my-clipper",
+          attrs: { src: _vm.imgURL, ratio: 1 }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "placeholder",
+              staticStyle: { position: "relative" },
+              attrs: { slot: "placeholder" },
+              slot: "placeholder"
+            },
+            [
+              _c("img", { attrs: { src: "/avatar/default.jpg" } }),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "overlay",
+                  staticStyle: {
+                    position: "absolute",
+                    top: "0",
+                    left: "0",
+                    width: "100%",
+                    height: "100%",
+                    "z-index": "9999",
+                    "padding-top": "50%"
+                  }
+                },
+                [
+                  _c("image-upload", {
+                    staticStyle: { "margin-top": "-20px", display: "none" },
+                    on: { loaded: _vm.onLoad, error: _vm.uploadError }
+                  })
+                ],
+                1
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _vm.errorMSG
+        ? _c("div", {
+            staticClass: "alert alert-danger",
+            domProps: { textContent: _vm._s(_vm.errorMSG) }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.resultURL,
+              expression: "resultURL"
+            }
+          ],
+          staticStyle: { position: "relative" }
+        },
+        [
+          _c("img", {
+            staticClass: "result img-fluid",
+            attrs: { src: _vm.resultURL, alt: "" }
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "overlay",
+              staticStyle: {
+                position: "absolute",
+                top: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                "z-index": "9999",
+                "padding-top": "50%"
+              }
             },
             [
               _c(
                 "div",
                 {
-                  staticClass: "placeholder",
-                  staticStyle: { position: "relative" },
-                  attrs: { slot: "placeholder" },
-                  slot: "placeholder"
+                  staticClass: "btn btn-danger btn-sm btn-block",
+                  staticStyle: { display: "none" },
+                  on: { click: _vm.reset }
                 },
-                [
-                  _c("img", { attrs: { src: "/avatar/default.jpg" } }),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "overlay",
-                      staticStyle: {
-                        position: "absolute",
-                        top: "0",
-                        left: "0",
-                        width: "100%",
-                        height: "100%",
-                        "z-index": "9999",
-                        "padding-top": "50%"
-                      }
-                    },
-                    [
-                      _c("image-upload", {
-                        staticStyle: { "margin-top": "-20px", display: "none" },
-                        on: { loaded: _vm.onLoad }
-                      })
-                    ],
-                    1
-                  )
-                ]
+                [_vm._v("löschen")]
               )
             ]
           )
-        : _vm._e(),
+        ]
+      ),
       _vm._v(" "),
-      _vm.resultURL
-        ? _c("div", { staticStyle: { position: "relative" } }, [
-            _c("img", {
-              staticClass: "result img-fluid",
-              attrs: { src: _vm.resultURL, alt: "" }
-            }),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "overlay",
-                staticStyle: {
-                  position: "absolute",
-                  top: "0",
-                  left: "0",
-                  width: "100%",
-                  height: "100%",
-                  "z-index": "9999",
-                  "padding-top": "50%"
-                }
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass: "btn btn-danger btn-sm btn-block",
-                    staticStyle: { display: "none" },
-                    on: { click: _vm.reset }
-                  },
-                  [_vm._v("löschen")]
-                )
-              ]
-            )
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.cropBTN
-        ? _c(
-            "div",
+      _c(
+        "div",
+        {
+          directives: [
             {
-              staticClass: "btn btn-success btn-block btn-sm",
-              on: { click: _vm.getResult }
-            },
-            [
-              _c("img", {
-                staticClass: "img-fluid",
-                attrs: { src: "/icons/crop.png", width: "25", height: "25" }
-              }),
-              _vm._v("\n        zuschneiden\n    ")
-            ]
-          )
-        : _vm._e()
+              name: "show",
+              rawName: "v-show",
+              value: _vm.cropBTN,
+              expression: "cropBTN"
+            }
+          ],
+          staticClass: "btn btn-success btn-block btn-sm",
+          on: { click: _vm.getResult }
+        },
+        [
+          _c("img", {
+            staticClass: "img-fluid",
+            attrs: { src: "/icons/crop.png", width: "25", height: "25" }
+          }),
+          _vm._v("\n        zuschneiden\n    ")
+        ]
+      ),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.resultURL,
+            expression: "resultURL"
+          }
+        ],
+        attrs: { type: "hidden", name: "crop" },
+        domProps: { value: _vm.resultURL },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.resultURL = $event.target.value
+          }
+        }
+      })
     ],
     1
   )
